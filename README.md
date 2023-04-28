@@ -28,3 +28,4 @@ return(
 - FadeOutAnimation
 - HorizontalAnimation
 - VerticalAnimation
+- AnimationButton
