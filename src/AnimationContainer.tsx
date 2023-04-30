@@ -1,43 +1,47 @@
-import React, {
-  ReactElement,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Animated, Pressable } from 'react-native';
 import { useAnimation } from './hooks/useAnimation';
 
 export const FadeOutAnimation: React.FC<{
   children: React.ReactNode | string;
-}> = ({ children }) => {
-  const { styleOpacityAnim } = useAnimation();
+  loop?: boolean;
+}> = ({ children, loop = true }) => {
+  const { opacityAnimation, styleOpacityAnim, playFadeIn, autoPlayFadeIn } =
+    useAnimation();
+
+  useEffect(() => {
+    loop ? autoPlayFadeIn() : playFadeIn();
+
+    return () => opacityAnimation.removeAllListeners();
+  }, [autoPlayFadeIn, loop, opacityAnimation, playFadeIn]);
 
   return <Animated.View style={styleOpacityAnim}>{children}</Animated.View>;
 };
 
 export const HorizontalAnimation: React.FC<{
   children: React.ReactNode | string;
-  value?: number;
+  loop?: boolean;
   startValue?: number;
   endValue?: number;
   duration?: number;
 }> = ({
   children,
-  value = 0,
   startValue = 0,
-  endValue = 50,
+  endValue = 10,
   duration = 1000,
+  loop = true,
 }) => {
-  const translateXAnimation = useRef(new Animated.Value(value)).current;
+  const { translateXAnimation, styleTranslateXAnim } = useAnimation();
 
-  const styleTranslateXAnim = {
-    transform: [
-      {
-        translateX: translateXAnimation,
-      },
-    ],
-  };
+  const playTiming = useCallback(() => {
+    translateXAnimation.setValue(startValue);
+
+    Animated.timing(translateXAnimation, {
+      toValue: endValue,
+      duration,
+      useNativeDriver: true,
+    }).start();
+  }, [duration, endValue, startValue, translateXAnimation]);
 
   const autoPlayTiming = useCallback(() => {
     translateXAnimation.setValue(startValue);
@@ -46,41 +50,43 @@ export const HorizontalAnimation: React.FC<{
         toValue: endValue,
         duration,
         useNativeDriver: true,
-      }),
+      })
     ).start();
   }, [duration, endValue, startValue, translateXAnimation]);
 
   useEffect(() => {
-    autoPlayTiming();
+    loop ? autoPlayTiming() : playTiming();
 
-    // return () => translateXAnimation.removeAllListeners();
-  }, [autoPlayTiming]);
+    return () => translateXAnimation.removeAllListeners();
+  }, [autoPlayTiming, loop, playTiming, translateXAnimation]);
 
   return <Animated.View style={styleTranslateXAnim}>{children}</Animated.View>;
 };
 
 export const VerticalAnimation: React.FC<{
   children: React.ReactNode | string;
-  value?: number;
+  loop?: boolean;
   startValue?: number;
   endValue?: number;
   duration?: number;
 }> = ({
   children,
-  value = 0,
   startValue = 0,
   endValue = 10,
   duration = 1000,
+  loop = true,
 }) => {
-  const translateYAnimation = useRef(new Animated.Value(value)).current;
+  const { translateYAnimation, styleTranslateYAnim } = useAnimation();
 
-  const styleTranslateXAnim = {
-    transform: [
-      {
-        translateY: translateYAnimation,
-      },
-    ],
-  };
+  const playTiming = useCallback(() => {
+    translateYAnimation.setValue(startValue);
+
+    Animated.timing(translateYAnimation, {
+      toValue: endValue,
+      duration,
+      useNativeDriver: true,
+    }).start();
+  }, [duration, endValue, startValue, translateYAnimation]);
 
   const autoPlayTiming = useCallback(() => {
     translateYAnimation.setValue(startValue);
@@ -89,17 +95,17 @@ export const VerticalAnimation: React.FC<{
         toValue: endValue,
         duration,
         useNativeDriver: true,
-      }),
+      })
     ).start();
   }, [duration, endValue, startValue, translateYAnimation]);
 
   useEffect(() => {
-    autoPlayTiming();
+    loop ? autoPlayTiming() : playTiming();
 
-    // return () => translateXAnimation.removeAllListeners();
-  }, [autoPlayTiming]);
+    return () => translateYAnimation.removeAllListeners();
+  }, [autoPlayTiming, loop, playTiming, translateYAnimation]);
 
-  return <Animated.View style={styleTranslateXAnim}>{children}</Animated.View>;
+  return <Animated.View style={styleTranslateYAnim}>{children}</Animated.View>;
 };
 
 export const AnimationButton: React.FC<{
@@ -151,7 +157,8 @@ export const AnimationButton: React.FC<{
         backgroundColor: props.backgroundColor,
         paddingHorizontal: props.paddingHorizontal,
         paddingVertical: props.paddingVertical,
-      }}>
+      }}
+    >
       <Animated.View style={{ transform: [{ scale: scale }] }}>
         {props.children}
       </Animated.View>

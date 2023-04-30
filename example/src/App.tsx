@@ -24,7 +24,7 @@ export default function App() {
 
       <Spacer space={12} />
 
-      <HorizontalAnimation value={10} startValue={10} endValue={0}>
+      <HorizontalAnimation startValue={10} endValue={0}>
         <Text>HorizontalAnimation</Text>
       </HorizontalAnimation>
 
@@ -36,7 +36,7 @@ export default function App() {
 
       <Spacer space={20} />
 
-      <VerticalAnimation value={10} startValue={10} endValue={0}>
+      <VerticalAnimation startValue={10} endValue={0}>
         <Text>VerticalAnimation</Text>
       </VerticalAnimation>
 
@@ -45,7 +45,8 @@ export default function App() {
       <AnimationButton
         onPress={() => {
           console.log('clicked AnimationButton');
-        }}>
+        }}
+      >
         <View style={styles.animationButton}>
           <Text style={styles.animationButtonText}>Animation Button</Text>
         </View>
