@@ -20,16 +20,17 @@ import { FadeOutAnimation } from 'react-native-animation-container';
 // ...
 
 return (
-    <FadeOutAnimation>
+    <FadeOutAnimation loop={false}>
         {/* Text, View, ... etc */}
     </FadeOutAnimation>
 )
 
 ```
 
-## components that can be used
+## Components List
 
 - FadeOutAnimation
+- FadeInAnimation
 - HorizontalAnimation
 - VerticalAnimation
 - AnimationButton

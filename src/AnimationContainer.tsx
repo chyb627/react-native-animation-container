@@ -6,16 +6,32 @@ export const FadeOutAnimation: React.FC<{
   children: React.ReactNode | string;
   loop?: boolean;
 }> = ({ children, loop = true }) => {
-  const { opacityAnimation, styleOpacityAnim, playFadeIn, autoPlayFadeIn } =
+  const { padeOutAnimation, stylePadeOutAnim, playFadeOut, autoPlayFadeOut } =
+    useAnimation();
+
+  useEffect(() => {
+    loop ? autoPlayFadeOut() : playFadeOut();
+
+    return () => padeOutAnimation.removeAllListeners();
+  }, [autoPlayFadeOut, loop, padeOutAnimation, playFadeOut]);
+
+  return <Animated.View style={stylePadeOutAnim}>{children}</Animated.View>;
+};
+
+export const FadeInAnimation: React.FC<{
+  children: React.ReactNode | string;
+  loop?: boolean;
+}> = ({ children, loop = true }) => {
+  const { padeInAnimation, stylePadeInAnim, playFadeIn, autoPlayFadeIn } =
     useAnimation();
 
   useEffect(() => {
     loop ? autoPlayFadeIn() : playFadeIn();
 
-    return () => opacityAnimation.removeAllListeners();
-  }, [autoPlayFadeIn, loop, opacityAnimation, playFadeIn]);
+    return () => padeInAnimation.removeAllListeners();
+  }, [autoPlayFadeIn, loop, padeInAnimation, playFadeIn]);
 
-  return <Animated.View style={styleOpacityAnim}>{children}</Animated.View>;
+  return <Animated.View style={stylePadeInAnim}>{children}</Animated.View>;
 };
 
 export const HorizontalAnimation: React.FC<{

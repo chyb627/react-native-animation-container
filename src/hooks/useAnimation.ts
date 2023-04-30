@@ -2,12 +2,17 @@ import { useCallback, useRef } from 'react';
 import { Animated } from 'react-native';
 
 export const useAnimation = () => {
-  const opacityAnimation = useRef(new Animated.Value(1)).current;
+  const padeOutAnimation = useRef(new Animated.Value(1)).current;
+  const padeInAnimation = useRef(new Animated.Value(0)).current;
   const translateXAnimation = useRef(new Animated.Value(-50)).current;
   const translateYAnimation = useRef(new Animated.Value(-50)).current;
 
-  const styleOpacityAnim = {
-    opacity: opacityAnimation,
+  const stylePadeOutAnim = {
+    opacity: padeOutAnimation,
+  };
+
+  const stylePadeInAnim = {
+    opacity: padeInAnimation,
   };
 
   const styleTranslateXAnim = {
@@ -26,31 +31,53 @@ export const useAnimation = () => {
     ],
   };
 
-  const playFadeIn = useCallback(() => {
-    Animated.timing(opacityAnimation, {
+  const playFadeOut = useCallback(() => {
+    Animated.timing(padeOutAnimation, {
       toValue: 0,
       duration: 1000,
       useNativeDriver: true,
     }).start();
-  }, [opacityAnimation]);
+  }, [padeOutAnimation]);
 
-  const autoPlayFadeIn = useCallback(() => {
+  const autoPlayFadeOut = useCallback(() => {
     Animated.loop(
-      Animated.timing(opacityAnimation, {
+      Animated.timing(padeOutAnimation, {
         toValue: 0,
         duration: 1000,
         useNativeDriver: true,
       })
     ).start();
-  }, [opacityAnimation]);
+  }, [padeOutAnimation]);
+
+  const playFadeIn = useCallback(() => {
+    Animated.timing(padeInAnimation, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, [padeInAnimation]);
+
+  const autoPlayFadeIn = useCallback(() => {
+    Animated.loop(
+      Animated.timing(padeInAnimation, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      })
+    ).start();
+  }, [padeInAnimation]);
 
   return {
-    opacityAnimation,
+    padeOutAnimation,
+    padeInAnimation,
     translateXAnimation,
     translateYAnimation,
-    styleOpacityAnim,
+    stylePadeOutAnim,
+    stylePadeInAnim,
     styleTranslateXAnim,
     styleTranslateYAnim,
+    playFadeOut,
+    autoPlayFadeOut,
     playFadeIn,
     autoPlayFadeIn,
   };

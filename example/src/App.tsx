@@ -3,6 +3,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import {
   AnimationButton,
+  FadeInAnimation,
   FadeOutAnimation,
   HorizontalAnimation,
   VerticalAnimation,
@@ -15,6 +16,12 @@ export default function App() {
       <FadeOutAnimation>
         <Text>FadeOutAnimation</Text>
       </FadeOutAnimation>
+
+      <Spacer space={12} />
+
+      <FadeInAnimation>
+        <Text>FadeInAnimation</Text>
+      </FadeInAnimation>
 
       <Spacer space={12} />
 
